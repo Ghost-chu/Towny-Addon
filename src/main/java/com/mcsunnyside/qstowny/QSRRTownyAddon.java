@@ -6,8 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.quickshop.QuickShop;
-import org.maxgamer.quickshop.Events.ShopCreateEvent;
-import org.maxgamer.quickshop.Events.ShopPreCreateEvent;
+import org.maxgamer.quickshop.Shop.ShopCreateEvent;
+import org.maxgamer.quickshop.Shop.ShopPreCreateEvent;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;

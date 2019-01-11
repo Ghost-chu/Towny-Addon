@@ -31,7 +31,7 @@ public class QSRRTownyAddon extends JavaPlugin implements Listener {
 		try {
 			QuickShop.getVersion();
 		}catch (Exception e) {
-			getLogger().severe("QSRR Towny Addon only can running under QuickShop-Reremake by Ghost_chu.");
+			getLogger().severe("QSRR Towny Addon only can support under QuickShop-Reremake by Ghost_chu, we can't promise it can working perfactly under other forks");
 			fail2load=true;
 			Bukkit.getPluginManager().disablePlugin(this);
 		}finally {

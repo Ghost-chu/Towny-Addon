@@ -51,6 +51,7 @@ public class QSRRTownyAddon extends JavaPlugin implements Listener {
 	}
 	@EventHandler
 	public void shopCreateEvent (ShopPreCreateEvent e) {
+		if(e.getPlayer().hasPermission("quickshop.addon.towny.bypass")) return;
 		TownyWorld tWorld = TownyUniverse.getDataSource().getTownWorld(e.getLocation().getWorld().getName());
 		if(tWorld==null||!tWorld.isUsingTowny()){
 			return;//Not Towny World, ignore it
@@ -71,6 +72,7 @@ public class QSRRTownyAddon extends JavaPlugin implements Listener {
 	}
 	@EventHandler
 	public void shopCreateEvent (ShopCreateEvent e) {
+		if(e.getPlayer().hasPermission("quickshop.addon.towny.bypass")) return;
 		TownyWorld tWorld = TownyUniverse.getDataSource().getTownWorld(e.getShop().getLocation().getWorld().getName());
 		if(tWorld==null||!tWorld.isUsingTowny()){
 			return;//Not Towny World, ignore it

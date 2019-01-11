@@ -7,6 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.Events.ShopCreateEvent;
+import org.maxgamer.quickshop.Events.ShopPreCreateEvent;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -36,11 +38,6 @@ public class QSRRTownyAddon extends JavaPlugin implements Listener {
 			if(fail2load)
 				return;
 		}
-		if(qs.special_region_only) {
-			getLogger().warning("You cannot use Towny Addon when you turn on Special_Region_Only features.");
-			fail2load=true;
-			Bukkit.getPluginManager().disablePlugin(this);
-		}
 		if(fail2load)
 			return;
 		saveDefaultConfig();
@@ -51,6 +48,26 @@ public class QSRRTownyAddon extends JavaPlugin implements Listener {
 	public void onDisable() {
 		if(fail2load)
 			return;
+	}
+	@EventHandler
+	public void shopCreateEvent (ShopPreCreateEvent e) {
+		TownyWorld tWorld = TownyUniverse.getDataSource().getTownWorld(e.getLocation().getWorld().getName());
+		if(tWorld==null||!tWorld.isUsingTowny()){
+			return;//Not Towny World, ignore it
+		}
+		TownBlock townBlock = null;
+		try {
+			 townBlock = new WorldCoord(e.getLocation().getWorld().getName(), Coord.parseCoord(e.getPlayer())).getTownBlock();
+		} catch (NotRegisteredException e1) {
+			//Ignore
+		}
+		if(townBlock==null)
+			return; //WTF
+		TownBlockType tBlockType = townBlock.getType();
+		if(tBlockType!=TownBlockType.COMMERCIAL) {
+			e.setCancelled(true);
+			e.getPlayer().sendMessage(getConfig().getString("messages.not-shop-plot"));
+		}
 	}
 	@EventHandler
 	public void shopCreateEvent (ShopCreateEvent e) {

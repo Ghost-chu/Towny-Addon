@@ -10,13 +10,9 @@ import org.maxgamer.quickshop.Shop.ShopCreateEvent;
 import org.maxgamer.quickshop.Shop.ShopPreCreateEvent;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 
 public class QSRRTownyAddon extends JavaPlugin implements Listener {
 	boolean fail2load = false;
@@ -51,19 +47,15 @@ public class QSRRTownyAddon extends JavaPlugin implements Listener {
 	}
 	@EventHandler
 	public void shopCreateEvent (ShopPreCreateEvent e) {
-		if(e.getPlayer().hasPermission("quickshop.addon.towny.bypass")) return;
-		TownyWorld tWorld = TownyUniverse.getDataSource().getTownWorld(e.getLocation().getWorld().getName());
-		if(tWorld==null||!tWorld.isUsingTowny()){
-			return;//Not Towny World, ignore it
+		if(e.getPlayer().hasPermission("quickshop.addon.towny.bypass")) {
+			return;
 		}
 		TownBlock townBlock = null;
-		try {
-			 townBlock = new WorldCoord(e.getLocation().getWorld().getName(), Coord.parseCoord(e.getPlayer())).getTownBlock();
-		} catch (NotRegisteredException e1) {
-			//Ignore
+		townBlock = TownyUniverse.getTownBlock(e.getLocation());
+		if(townBlock==null) {
+			e.setCancelled(true);
+			return;
 		}
-		if(townBlock==null)
-			return; //WTF
 		TownBlockType tBlockType = townBlock.getType();
 		if(tBlockType!=TownBlockType.COMMERCIAL) {
 			e.setCancelled(true);
@@ -72,19 +64,15 @@ public class QSRRTownyAddon extends JavaPlugin implements Listener {
 	}
 	@EventHandler
 	public void shopCreateEvent (ShopCreateEvent e) {
-		if(e.getPlayer().hasPermission("quickshop.addon.towny.bypass")) return;
-		TownyWorld tWorld = TownyUniverse.getDataSource().getTownWorld(e.getShop().getLocation().getWorld().getName());
-		if(tWorld==null||!tWorld.isUsingTowny()){
-			return;//Not Towny World, ignore it
+		if(e.getPlayer().hasPermission("quickshop.addon.towny.bypass")) {
+			return;
 		}
 		TownBlock townBlock = null;
-		try {
-			 townBlock = new WorldCoord(e.getShop().getLocation().getWorld().getName(), Coord.parseCoord(e.getPlayer())).getTownBlock();
-		} catch (NotRegisteredException e1) {
-			//Ignore
+		townBlock = TownyUniverse.getTownBlock(e.getShop().getLocation());
+		if(townBlock==null) {
+			e.setCancelled(true);
+			return;
 		}
-		if(townBlock==null)
-			return; //WTF
 		TownBlockType tBlockType = townBlock.getType();
 		if(tBlockType!=TownBlockType.COMMERCIAL) {
 			e.setCancelled(true);
